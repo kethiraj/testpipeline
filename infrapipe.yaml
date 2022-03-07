@@ -1,9 +1,9 @@
 ---
 resources:
-- name: dynamodb
+- name: git
   type: git
   source:
-    uri: 
+    uri: https://github.com/kethiraj/testpipeline.git
     branch: master
 
 - name: terraform-image
@@ -16,21 +16,8 @@ resources:
 jobs:
   - name: terraform-pipe-line
     plan:
-    - get: dynamodb
+    - get: git
     - get: terraform-image
-
-    - task: check-terrafom-version
-      config:
-        platform: linux
-        image_resource:
-          type: docker-image
-          source: {repository: hashicorp/terraform}
-        run:
-            path: sh
-            args: 
-                - -exc
-                - |
-                  terraform --version
     
     - task: run-terraform
       config:
@@ -39,7 +26,7 @@ jobs:
           type: docker-image
           source: {repository: hashicorp/terraform}
         inputs:
-            - name: dynamodb        
+            - name: git        
         run:
             path: sh
             args: 
@@ -47,33 +34,9 @@ jobs:
                 - |
                   env
                   ls -lrth
-                  cd dynamodb
-                  ls -lrth
                   terraform init
                   terraform plan
                   terraform apply --auto-approve                             
-        params:
-          AWS_ACCESS_KEY_ID: ((access-key))
-          AWS_SECRET_ACCESS_KEY: ((secret-key))
-
-    - task: remove-terraform
-      config:
-        platform: linux
-        image_resource:
-          type: docker-image
-          source: {repository: hashicorp/terraform}
-        inputs:
-            - name: dynamodb
-        run:
-            path: sh
-            args: 
-                - -exc
-                - |
-                  ls -lrth
-                  cd dynamodb
-                  terraform init
-                  terraform plan
-                  terraform destroy --auto-approve        
         params:
           AWS_ACCESS_KEY_ID: ((access-key))
           AWS_SECRET_ACCESS_KEY: ((secret-key))
