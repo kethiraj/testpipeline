@@ -42,3 +42,25 @@ jobs:
         params:
           AWS_ACCESS_KEY_ID: ((access-key))
           AWS_SECRET_ACCESS_KEY: ((secret-key))
+    
+    - task: remove-terraform
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: hashicorp/terraform}
+        inputs:
+            - name: git
+        run:
+            path: sh
+            args: 
+                - -exc
+                - |
+                  ls -lrth
+                  cd git
+                  terraform init
+                  terraform plan
+                  terraform destroy --auto-approve        
+        params:
+          AWS_ACCESS_KEY_ID: ((access-key))
+          AWS_SECRET_ACCESS_KEY: ((secret-key))      
