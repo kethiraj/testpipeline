@@ -8,16 +8,16 @@ image_resource:
     tag: 3.6.0-jdk-8-alpine
 
 inputs:
-  - name: git
+  - name: spring-boot-service
 
 run:
   path: "mvn"
   args:
     - -f
-    - git/pom.xml
+    - gspring-boot-serviceit/pom.xml
     - clean
     - package
     
 outputs:
-  - name: git-out
-    path: git
+  - name: spring-boot-service-out
+    path: spring-boot-service
