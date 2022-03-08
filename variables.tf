@@ -1,86 +1,48 @@
-
-##===========================================================================================
-## AWS Account,Region & env Specific
-##===========================================================================================
-
-
-variable "account_profile" {
-  type        = string
-  description = "Profile permissions."
-  default = "default"
+variable "aws_region" {
+  description = "The AWS region things are created in"
+  default     = "ap-south-1"
 }
 
-variable "region" {
-  type    = string
-  description = "Region that we wish to deploy into."
-  default="us-east-1"
+variable "ecs_task_execution_role_name" {
+  description = "ECS task execution role name"
+  default = "myEcsTaskExecutionRole"
 }
 
- 
-variable "EnvironmentType" {
-  type        = string
-  description = "Type of the environment. Allowed values are dev,alpha,beta and prod"
-  default="dev"
+variable "ecs_auto_scale_role_name" {
+  description = "ECS auto scale role Name"
+  default = "myEcsAutoScaleRole"
 }
 
-
-variable "ResourceOwner" {
-  type        = string
-  description = "Name of the resource owner"
-  default = "vijith"
+variable "az_count" {
+  description = "Number of AZs to cover in a given region"
+  default     = "2"
 }
 
-##=============================================================================================
-## Dynamo DB Specific attributes
-##==============================================================================================
-
-
-variable "billing_mode" {
- description = "Controls how you are charged valid values are PROVISIONED and PAY_PER_REQUEST. Defaults to PROVISIONED" 
- default = "PROVISIONED"
+variable "app_image" {
+  description = "Docker image to run in the ECS cluster"
+  default     = "ethiraj3390/concourse:latest"
 }
 
-
-variable "read_attribute"{
- description = " The number of read units for this table / smaple format 1 / 2 / 100 etc" 
- default = "1"
+variable "app_port" {
+  description = "Port exposed by the docker image to redirect traffic to"
+  default     = 3000
 }
 
-variable "write_attribute"{
- default = "1"
- type = number
- description = " The number of write units for this table / smaple format 1 / 2 / 100 etc"
+variable "app_count" {
+  description = "Number of docker containers to run"
+  default     = 3
 }
 
-
-variable "attribute_type"{
- description = "Attribute type, which must be a scalar type: S, N, or B for (S)tring, (N)umber or (B)inary data"
- default = "S"
+variable "health_check_path" {
+  default = "/"
 }
 
-
-variable "table_name"{
- description = "Table name which has to be created, ex: aaa-cache" 
-   default = "aaa-cache"
+variable "fargate_cpu" {
+  description = "Fargate instance CPU units to provision (1 vCPU = 1024 CPU units)"
+  default     = "1024"
 }
 
-variable "table_attribute"{
- description = "attribute to use as the hash (partition) key, Partition Key , ex : UserID" 
-  default = "userid"
-}
-
-
-variable "enable_point_in_time_recovery" {
-    description = "Enable DynamoDB point in time recovery"
-    default = "false"
-}
-
-
-locals {
-  
-  tags = {
-    "tr:resource-owner"               = "${var.ResourceOwner}"
-    "tr:environment-type"             = "${var.EnvironmentType}"
-  }
-
+variable "fargate_memory" {
+  description = "Fargate instance memory to provision (in MiB)"
+  default     = "2048"
 }
