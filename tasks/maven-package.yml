@@ -14,7 +14,7 @@ run:
   path: "mvn"
   args:
     - -f
-    - gspring-boot-serviceit/pom.xml
+    - spring-boot-serviceit/pom.xml
     - clean
     - package
     
