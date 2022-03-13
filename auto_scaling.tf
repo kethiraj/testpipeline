@@ -4,7 +4,6 @@ resource "aws_appautoscaling_target" "target" {
   service_namespace  = "ecs"
   resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.main.name}"
   scalable_dimension = "ecs:service:DesiredCount"
-  role_arn           = aws_iam_role.ecs_auto_scale_role.arn
   min_capacity       = 3
   max_capacity       = 6
 }
@@ -43,7 +42,7 @@ resource "aws_appautoscaling_policy" "down" {
     metric_aggregation_type = "Maximum"
 
     step_adjustment {
-      metric_interval_lower_bound = 0
+      metric_interval_upper_bound = 0
       scaling_adjustment          = -1
     }
   }
