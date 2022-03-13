@@ -3,7 +3,7 @@ terraform {
         backend "s3" {
         bucket = "ethiraj07032022"
         key = "terraform.tfstate"
-        dynamodb_table = "tf-state-lock"
+        dynamodb_table = aws_dynamodb_table.base_dynamo_table.name
         region =  "ap-south-1"
         }
 }
